@@ -2,9 +2,9 @@
 #include <cmath>
 
 #include "Knot.h"
-#include "Line.cpp"
-#include "Time.h"
 #include "KnotsArr.h"
+#include "Time.h"
+#include "Line.cpp"
 
 using namespace std;
 
@@ -16,6 +16,7 @@ using namespace std;
 #define PINK  122, 0, 122, 255
 #define GREEN 46, 155, 46, 255
 #define RED 227, 36, 43, 255
+
 
 vec2f get_mouse_pos();
 void compute_velocity(Knot *knot, knots_arr *arr);
@@ -41,7 +42,7 @@ int main(int argc, char **argv){
     
     
 	knots_arr knots{.size=0};
-    bool should_close=0, left_pressed=0;
+    bool should_close=0, left_pressed=0, space_pressed=0;
     int drag_ind=-1;
     while(!should_close){
 		time.update_time();
@@ -59,7 +60,7 @@ int main(int argc, char **argv){
 						if(knots.size==0)
 							add_knot(&knots, Knot(mx, my, SDL_Color{GREEN}));
 						else{
-						int i;bool breaked=false;
+							int i;bool breaked=false;
 							for(i=0; i<knots.size; i++){
 								if(knots[i].is_inside_circle(mx, my)){
 									breaked=true;
@@ -68,14 +69,14 @@ int main(int argc, char **argv){
 							}
 
 							if(breaked){
-								if(knots[i].neigh_ind<NEIGH_CAP){
-									add_knot(&knots, Knot(mx, my, SDL_Color{GREEN}));
-									add_neighbour(&knots[i], knots.size-1);
-									add_neighbour(&knots[knots.size-1], i);
+								if(knots[i].neigh_ind < NEIGH_CAP){
+									if(add_knot(&knots, Knot(mx, my, SDL_Color{GREEN}))){
+										add_neighbour(&knots[i], knots.size-1);
+										add_neighbour(&knots[knots.size-1], i);
+									}
 								}
 							}
 						}
-
 					}
 
 				break;
@@ -89,10 +90,24 @@ int main(int argc, char **argv){
 				case SDL_KEYDOWN:
 				
 					if(e.key.keysym.sym == SDLK_ESCAPE) should_close=1;
+					if(e.key.keysym.sym == SDLK_SPACE) space_pressed=1;
+
+				break;
+
+				case SDL_KEYUP:
+
+					if(e.key.keysym.sym == SDLK_SPACE) space_pressed=0;
 
 				break;
 			}
         }
+
+		if(space_pressed && knots.size!=0){
+			//clear the knots data
+			memset(&knots, 0, sizeof(knots[0]));
+			knots.size=0;
+			continue;
+		}
 
         if(left_pressed){
 			auto [mx, my]=get_mouse_pos();

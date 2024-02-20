@@ -7,7 +7,6 @@ using namespace std;
 
 #define EPSILON 0.000001
 
-
 void draw_thicc_line(SDL_Renderer *rend, float x1, float y1, float x2, float y2, float t, SDL_Color color){
 	float dx=x2-x1, dy=y2-y1;
 	float x3=-dy, y3=dx;
