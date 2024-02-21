@@ -1,6 +1,6 @@
 # Rope Simulator
 
-Inspired by [Tsoding's Rope Simulator](https://github.com/tsoding/rope-jai).
+Inspired by [Tsoding's Rope Simulator](https://github.com/tsoding/rope-jai). You can try it in the website [here](https://georgikaradakov.github.io/rope-simulator-web/)
 
 ## Description
 The project simulates a rope with a little bit of physics. 
