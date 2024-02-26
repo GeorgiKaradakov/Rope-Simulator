@@ -18,8 +18,8 @@ public:
 
 public:
     Knot(float cx, float cy, SDL_Color color);
-    Knot(){}
-    void render_knot(SDL_Renderer *rend);
+    Knot();    
+	void render_knot(SDL_Renderer *rend);
     bool is_inside_circle(float x, float y);
     bool set_center_coords(vec2f coords, int width, int height);
 
@@ -28,12 +28,18 @@ private:
     vec2f get_y_range();
 };
 
+Knot::Knot(){
+	this->cx=0, this->cy=0;
+	this->color=SDL_Color{0, 0, 0, 255};
+	this->neighbours=new int[NEIGH_CAP];
+	this->neigh_ind=0;
+}
+
+
 Knot::Knot(float cx, float cy, SDL_Color color){
     this->cx=cx;
     this->cy=cy;
     this->color=color;
-	this->neighbours=new int[NEIGH_CAP];
-	this->neigh_ind=0;
 }
 
 bool Knot::is_inside_circle(float x, float y){

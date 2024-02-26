@@ -41,7 +41,7 @@ int main(int argc, char **argv){
 	Time time = Time();
     
     
-	knots_arr knots{.size=0};
+	knots_arr knots=knots_arr();
     bool should_close=0, left_pressed=0, space_pressed=0;
     int drag_ind=-1;
     while(!should_close){
@@ -58,7 +58,7 @@ int main(int argc, char **argv){
 						auto [mx, my]=get_mouse_pos();
 
 						if(knots.size==0)
-							add_knot(&knots, Knot(mx, my, SDL_Color{GREEN}));
+							add_knot(&knots, mx, my, SDL_Color{GREEN});
 						else{
 							int i;bool breaked=false;
 							for(i=0; i<knots.size; i++){
@@ -70,7 +70,7 @@ int main(int argc, char **argv){
 
 							if(breaked){
 								if(knots[i].neigh_ind < NEIGH_CAP){
-									if(add_knot(&knots, Knot(mx, my, SDL_Color{GREEN}))){
+									if(add_knot(&knots, mx, my, SDL_Color{GREEN})){
 										add_neighbour(&knots[i], knots.size-1);
 										add_neighbour(&knots[knots.size-1], i);
 									}
@@ -104,7 +104,11 @@ int main(int argc, char **argv){
 
 		if(space_pressed && knots.size!=0){
 			//clear the knots data
-			memset(&knots, 0, sizeof(knots[0]));
+			for(int i=0; i<KNOTS_CNT; i++){
+				knots[i].neigh_ind=0;
+				for(int j=0; j<NEIGH_CAP; j++)
+					knots[i].neighbours[j]=-1;
+			}
 			knots.size=0;
 			continue;
 		}
